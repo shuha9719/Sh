@@ -162,8 +162,8 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 
 <script>
 // ── КОНФИГ (замени ключ здесь если истечёт) ──
-const GEMINI_KEY = 'AIzaSyAb8RN6JqbmaiH62Ah24hOnHkWppzM5Kxy4eh-6q3oemPHdePtg';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`;
+const GEMINI_KEY = 'AQ.Ab8RN6LNeK6r3uuMc_TOk606lfcqFyKGP3OBWAfmyNrRu8xw3w';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
 let photoBase64 = null;
 let photoMime = 'image/jpeg';
@@ -248,7 +248,10 @@ async function analyze(){
   try {
     const res = await fetch(GEMINI_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'X-goog-api-key': GEMINI_KEY
+      },
       body: JSON.stringify({
         contents:[{parts:[
           {text: prompt},
