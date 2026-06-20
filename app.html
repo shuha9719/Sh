@@ -96,12 +96,12 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 
 <div class="main">
 
-  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+  <div class="upload-zone" id="uploadZone">
     <div class="upload-icon">📸</div>
     <div class="upload-text">Загрузи своё фото</div>
     <div class="upload-sub">Анфас, хорошее освещение</div>
   </div>
-  <input type="file" id="fileInput" accept="image/*" capture="user">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;"><button onclick="document.getElementById('fileCamera').click()" style="padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:13px;cursor:pointer;">📷 Камера</button><button onclick="document.getElementById('fileGallery').click()" style="padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:13px;cursor:pointer;">🖼 Медиатека</button></div><input type="file" id="fileCamera" accept="image/*" capture="environment"><input type="file" id="fileGallery" accept="image/*">
 
   <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyze()">
     ✂️ Подобрать стрижку
@@ -145,8 +145,8 @@ const steps = [
   ['Подбираю стрижки...', 'Почти готово'],
 ];
 
-document.getElementById('fileInput').addEventListener('change', function(e){
-  const file = e.target.files[0];
+document.getElementById('fileCamera').addEventListener('change', function(e){
+  handleFile(e.target.files[0]);
   if(!file) return;
   const reader = new FileReader();
   reader.onload = function(ev){
@@ -179,6 +179,50 @@ document.getElementById('fileInput').addEventListener('change', function(e){
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
+});
+
+document.getElementById('fileGallery').addEventListener('change', function(e){
+  document.getElementById('fileCamera').dispatchEvent(Object.assign(new Event('change'), {target: e.target}));
+});
+
+// Общий обработчик файла
+function handleFile(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const maxSize = 800;
+      let w = img.width, h = img.height;
+      if(w > maxSize || h > maxSize){
+        if(w > h){ h = Math.round(h*maxSize/w); w = maxSize; }
+        else{ w = Math.round(w*maxSize/h); h = maxSize; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const compressed = canvas.toDataURL('image/jpeg', 0.8);
+      photoBase64 = compressed.split(',')[1];
+      photoMime = 'image/jpeg';
+      const zone = document.getElementById('uploadZone');
+      zone.innerHTML = `
+        <img src="${compressed}" alt="Фото">
+        <div class="overlay">
+          <div style="font-size:28px">✅</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:8px;">Фото загружено</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;">Нажми чтобы сменить</div>
+        </div>`;
+      zone.classList.add('has-photo');
+      document.getElementById('analyzeBtn').disabled = false;
+      hideError();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('fileGallery').addEventListener('change', function(e){
+  handleFile(e.target.files[0]);
 });
 
 function startSteps(){
