@@ -113,7 +113,7 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 </div>
 
 <script>
-var PEXELS = 'YstCNGN1pvazhgHtPd0z3E1whf7FER7WEnC3koB16hQvib7KbTUUVUyz';
+var SERVER = 'https://shuha.onrender.com';
 
 var F=['oval','round','square','rect','tri','dia'];
 var FL=['Овальное','Круглое','Квадратное','Прямоугольное','Треугольное','Ромбовидное'];
@@ -230,19 +230,27 @@ function showResult() {
   window.scrollTo(0,0);
 
   for(var j=0; j<cuts.length; j++) {
-    (function(query, idx){
-      fetch('https://api.pexels.com/v1/search?query='+encodeURIComponent(query)+'&per_page=3&orientation=square',
-        {headers:{'Authorization':PEXELS}})
+    (function(haircut, idx){
+      var c = document.getElementById('ph'+idx);
+      if(c) c.innerHTML = '<div class="photo" style="grid-column:1/-1;aspect-ratio:3/1;font-size:12px;color:rgba(255,255,255,0.3);">✂️ Генерирую фото...</div>';
+      fetch(SERVER+'/generate', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({haircut: haircut})
+      })
       .then(function(r){ return r.json(); })
       .then(function(d){
-        var photos = d.photos || [];
-        if(!photos.length) return;
+        var images = d.images || [];
+        if(!images.length) return;
         var c = document.getElementById('ph'+idx);
         if(!c) return;
         var h = '';
-        for(var k=0; k<photos.length; k++) h += '<div class="photo"><img src="'+photos[k].src.medium+'"></div>';
+        for(var k=0; k<images.length; k++) h += '<div class="photo"><img src="data:image/png;base64,'+images[k]+'"></div>';
         c.innerHTML = h;
-      }).catch(function(){});
+      }).catch(function(e){
+        var c = document.getElementById('ph'+idx);
+        if(c) c.innerHTML = '';
+      });
     })(cuts[j].e, j);
   }
 }
