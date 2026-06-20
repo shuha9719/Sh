@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>S&H — AI Стилист</title>
+<title>S&H — Подбор стрижки</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -15,65 +15,70 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 .back-btn{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;
   border-radius:16px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
   color:rgba(255,255,255,0.6);text-decoration:none;}
-.main{padding:70px 16px 40px;}
-.upload-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:220px;border-radius:24px;border:2px dashed rgba(255,255,255,0.15);
-  background:rgba(255,255,255,0.03);cursor:pointer;transition:all .3s;margin-bottom:16px;
-  position:relative;overflow:hidden;}
-.upload-zone.has-photo{border-style:solid;border-color:rgba(255,255,255,0.2);}
-.upload-zone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:22px;}
-.upload-zone .overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;border-radius:22px;}
-.upload-icon{font-size:40px;margin-bottom:10px;}
-.upload-text{font-size:13px;color:rgba(255,255,255,0.5);text-align:center;padding:0 20px;}
-.upload-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:6px;}
-#fileInput{display:none;}
-.analyze-btn{width:100%;padding:16px;border-radius:18px;border:none;cursor:pointer;font-family:'Inter';
-  font-size:14px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
+.main{padding:76px 16px 40px;}
+
+/* Шаги */
+.step{display:none;}
+.step.active{display:block;}
+.step-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);margin-bottom:6px;}
+.step-title{font-size:22px;font-weight:600;margin-bottom:20px;line-height:1.3;}
+
+/* Прогресс */
+.progress{display:flex;gap:6px;margin-bottom:28px;}
+.progress-dot{height:3px;border-radius:2px;flex:1;background:rgba(255,255,255,0.1);transition:background .3s;}
+.progress-dot.done{background:rgba(255,255,255,0.8);}
+
+/* Карточки выбора */
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.option{padding:16px 12px;border-radius:18px;border:2px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);cursor:pointer;text-align:center;transition:all .2s;}
+.option:active{transform:scale(0.97);}
+.option.selected{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);}
+.option-icon{font-size:32px;margin-bottom:8px;}
+.option-name{font-size:13px;font-weight:600;}
+.option-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;line-height:1.4;}
+
+/* Кнопка далее */
+.next-btn{width:100%;padding:16px;border-radius:18px;border:none;cursor:pointer;
+  font-family:'Inter';font-size:14px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
   background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));
   border:1px solid rgba(255,255,255,0.25);color:#fff;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);
-  transition:all .2s;margin-bottom:20px;}
-.analyze-btn:disabled{opacity:0.4;cursor:not-allowed;}
-.analyze-btn:active{transform:scale(0.98);}
-.loader{display:none;flex-direction:column;align-items:center;gap:14px;padding:32px;
-  background:rgba(255,255,255,0.04);border-radius:20px;border:1px solid rgba(255,255,255,0.08);
-  margin-bottom:20px;}
-.loader.show{display:flex;}
-.spinner{width:36px;height:36px;border:2px solid rgba(255,255,255,0.1);border-top-color:#fff;
-  border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.loader-text{font-size:13px;color:rgba(255,255,255,0.5);text-align:center;}
-.loader-step{font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;text-align:center;}
-.result-box{display:none;margin-bottom:20px;}
-.result-box.show{display:block;}
-.face-analysis{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.03));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);transition:all .2s;}
+.next-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.next-btn:active{transform:scale(0.98);}
+
+/* Результат */
+.result-header{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.03));
   border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:20px;margin-bottom:16px;}
-.face-analysis .label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
-  color:rgba(255,255,255,0.3);margin-bottom:10px;}
-.face-params{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.face-param{background:rgba(255,255,255,0.06);border-radius:12px;padding:10px 12px;}
-.face-param .pn{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:3px;}
-.face-param .pv{font-size:14px;font-weight:600;}
-.ai-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;}
-.cuts-section{margin-bottom:20px;}
+.result-header .rl{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);margin-bottom:8px;}
+.result-params{display:flex;gap:10px;margin-bottom:12px;}
+.result-param{background:rgba(255,255,255,0.06);border-radius:12px;padding:8px 12px;flex:1;text-align:center;}
+.result-param .rn{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:3px;}
+.result-param .rv{font-size:12px;font-weight:600;}
+.result-tip{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;}
+
 .cuts-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
   color:rgba(255,255,255,0.3);margin-bottom:12px;}
 .cut-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
   border-radius:18px;overflow:hidden;margin-bottom:12px;padding:16px;}
-.cut-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.cut-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
 .cut-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:600;flex-shrink:0;}
 .cut-name{font-size:16px;font-weight:600;}
-.cut-desc{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
+.cut-name-en{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px;}
 .cut-why{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:14px;}
-.pinterest-btn{display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:11px;border-radius:12px;
-  background:rgba(230,0,35,0.12);border:1px solid rgba(230,0,35,0.25);
-  color:rgba(255,120,120,0.9);font-size:12px;letter-spacing:0.06em;
-  text-decoration:none;font-weight:500;}
-.pinterest-btn:active{opacity:0.7;}
+.pin-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;
+  border-radius:12px;background:rgba(230,0,35,0.1);border:1px solid rgba(230,0,35,0.2);
+  color:rgba(255,130,130,0.9);font-size:12px;font-weight:500;text-decoration:none;letter-spacing:0.04em;}
+.pin-btn:active{opacity:0.7;}
+
+.restart-btn{width:100%;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);font-family:'Inter';
+  font-size:13px;cursor:pointer;margin-bottom:16px;}
+
 .book-cta{background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));
   border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:20px;text-align:center;}
 .book-cta .bt{font-size:15px;font-weight:600;margin-bottom:6px;}
@@ -82,46 +87,138 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
   background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);
   font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#fff;font-weight:600;
   text-decoration:none;}
-.error-box{display:none;background:rgba(255,60,60,0.08);border:1px solid rgba(255,60,60,0.2);
-  border-radius:16px;padding:16px;margin-bottom:16px;font-size:13px;color:rgba(255,100,100,0.9);line-height:1.6;}
-.error-box.show{display:block;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="logo">S&H · AI Стилист</div>
+  <div class="logo">S&H · Подбор стрижки</div>
   <a class="back-btn" href="index.html">← Назад</a>
 </div>
 
 <div class="main">
 
-  <div class="upload-zone" id="uploadZone">
-    <div class="upload-icon">📸</div>
-    <div class="upload-text">Загрузи своё фото</div>
-    <div class="upload-sub">Анфас, хорошее освещение</div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;"><button onclick="document.getElementById('fileCamera').click()" style="padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:13px;cursor:pointer;">📷 Камера</button><button onclick="document.getElementById('fileGallery').click()" style="padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:13px;cursor:pointer;">🖼 Медиатека</button></div><input type="file" id="fileCamera" accept="image/*" capture="environment"><input type="file" id="fileGallery" accept="image/*">
-
-  <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyze()">
-    ✂️ Подобрать стрижку
-  </button>
-
-  <div class="error-box" id="errorBox"></div>
-
-  <div class="loader" id="loader">
-    <div class="spinner"></div>
-    <div class="loader-text" id="loaderText">Анализирую лицо...</div>
-    <div class="loader-step" id="loaderStep">GigaChat обрабатывает фото</div>
+  <!-- Прогресс -->
+  <div class="progress">
+    <div class="progress-dot" id="dot1"></div>
+    <div class="progress-dot" id="dot2"></div>
+    <div class="progress-dot" id="dot3"></div>
   </div>
 
-  <div class="result-box" id="resultBox">
-    <div class="face-analysis">
-      <div class="label">Анализ лица</div>
-      <div class="face-params" id="faceParams"></div>
-      <div class="ai-text" id="aiText"></div>
+  <!-- Шаг 1: Форма лица -->
+  <div class="step active" id="step1">
+    <div class="step-label">Шаг 1 из 3</div>
+    <div class="step-title">Какая форма лица?</div>
+    <div class="options">
+      <div class="option" onclick="select1('oval','Овальное')">
+        <div class="option-icon">🥚</div>
+        <div class="option-name">Овальное</div>
+        <div class="option-desc">Вытянутое, узкий подбородок</div>
+      </div>
+      <div class="option" onclick="select1('round','Круглое')">
+        <div class="option-icon">🔵</div>
+        <div class="option-name">Круглое</div>
+        <div class="option-desc">Широкие щёки, мягкий подбородок</div>
+      </div>
+      <div class="option" onclick="select1('square','Квадратное')">
+        <div class="option-icon">⬜</div>
+        <div class="option-name">Квадратное</div>
+        <div class="option-desc">Широкая скула и подбородок</div>
+      </div>
+      <div class="option" onclick="select1('rect','Прямоугольное')">
+        <div class="option-icon">📱</div>
+        <div class="option-name">Прямоугольное</div>
+        <div class="option-desc">Длинное, угловатый подбородок</div>
+      </div>
+      <div class="option" onclick="select1('tri','Треугольное')">
+        <div class="option-icon">🔺</div>
+        <div class="option-name">Треугольное</div>
+        <div class="option-desc">Широкий лоб, узкий подбородок</div>
+      </div>
+      <div class="option" onclick="select1('dia','Ромбовидное')">
+        <div class="option-icon">💎</div>
+        <div class="option-name">Ромбовидное</div>
+        <div class="option-desc">Широкие скулы, узкий лоб</div>
+      </div>
     </div>
-    <div class="cuts-section" id="cutsSection"></div>
+    <button class="next-btn" id="next1" disabled onclick="goStep(2)">Далее →</button>
+  </div>
+
+  <!-- Шаг 2: Длина -->
+  <div class="step" id="step2">
+    <div class="step-label">Шаг 2 из 3</div>
+    <div class="step-title">Какую длину предпочитаешь?</div>
+    <div class="options">
+      <div class="option" onclick="select2('short','Короткая')">
+        <div class="option-icon">⚡</div>
+        <div class="option-name">Короткая</div>
+        <div class="option-desc">Чистый, опрятный вид</div>
+      </div>
+      <div class="option" onclick="select2('medium','Средняя')">
+        <div class="option-icon">✂️</div>
+        <div class="option-name">Средняя</div>
+        <div class="option-desc">Универсально и стильно</div>
+      </div>
+      <div class="option" onclick="select2('fade','Fade')">
+        <div class="option-icon">🎯</div>
+        <div class="option-name">Fade / Тейпер</div>
+        <div class="option-desc">Градиент по бокам</div>
+      </div>
+      <div class="option" onclick="select2('long','Длинная')">
+        <div class="option-icon">🌊</div>
+        <div class="option-name">Длинная</div>
+        <div class="option-desc">Свободный стиль</div>
+      </div>
+    </div>
+    <button class="next-btn" id="next2" disabled onclick="goStep(3)">Далее →</button>
+  </div>
+
+  <!-- Шаг 3: Стиль -->
+  <div class="step" id="step3">
+    <div class="step-label">Шаг 3 из 3</div>
+    <div class="step-title">Какой стиль ближе?</div>
+    <div class="options">
+      <div class="option" onclick="select3('classic','Классика')">
+        <div class="option-icon">👔</div>
+        <div class="option-name">Классика</div>
+        <div class="option-desc">Строго и элегантно</div>
+      </div>
+      <div class="option" onclick="select3('modern','Современный')">
+        <div class="option-icon">🔥</div>
+        <div class="option-name">Современный</div>
+        <div class="option-desc">Трендово и модно</div>
+      </div>
+      <div class="option" onclick="select3('street','Уличный')">
+        <div class="option-icon">🧢</div>
+        <div class="option-name">Уличный</div>
+        <div class="option-desc">Дерзко и свободно</div>
+      </div>
+      <div class="option" onclick="select3('sport','Спорт')">
+        <div class="option-icon">💪</div>
+        <div class="option-name">Спортивный</div>
+        <div class="option-desc">Практично и чисто</div>
+      </div>
+    </div>
+    <button class="next-btn" id="next3" disabled onclick="showResult()">Подобрать ✂️</button>
+  </div>
+
+  <!-- Результат -->
+  <div class="step" id="stepResult">
+    <div class="result-header">
+      <div class="rl">Твой профиль</div>
+      <div class="result-params">
+        <div class="result-param"><div class="rn">Лицо</div><div class="rv" id="rFace">—</div></div>
+        <div class="result-param"><div class="rn">Длина</div><div class="rv" id="rLen">—</div></div>
+        <div class="result-param"><div class="rn">Стиль</div><div class="rv" id="rStyle">—</div></div>
+      </div>
+      <div class="result-tip" id="rTip"></div>
+    </div>
+
+    <div class="cuts-label">Рекомендованные стрижки</div>
+    <div id="cutsContainer"></div>
+
+    <button class="restart-btn" onclick="restart()">← Подобрать заново</button>
+
     <div class="book-cta">
       <div class="bt">Понравилась идея?</div>
       <div class="bs">Запишись к Шухрату — воплотим вместе</div>
@@ -132,180 +229,132 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 </div>
 
 <script>
-const SERVER_URL = 'https://shuha.onrender.com';
+// ══════════════════════════════════════
+// БАЗА СТРИЖЕК
+// ══════════════════════════════════════
+const DB = {
+  oval: {
+    tip: 'Овальное лицо — идеальная форма для любых стрижек. Тебе подойдёт практически всё — экспериментируй смело.',
+    short: {
+      classic: [{name:'Классический пробор',en:'classic side part haircut men',why:'Чистые линии подчёркивают правильные пропорции овального лица.'},{name:'Crew Cut',en:'crew cut men barbershop',why:'Аккуратная короткая стрижка, универсальная для любого случая.'},{name:'Ivy League',en:'ivy league haircut men',why:'Элегантно и строго — идеально для бизнеса.'}],
+      modern:  [{name:'Textured Crop',en:'textured crop haircut men 2024',why:'Модная текстура сверху с чистыми боками.'},{name:'French Crop',en:'french crop haircut men',why:'Чёлка вперёд — актуальный европейский тренд.'},{name:'Buzz Cut',en:'buzz cut men style',why:'Минималистично и очень чисто.'}],
+      street:  [{name:'Edgar Cut',en:'edgar cut haircut men',why:'Резкая прямая чёлка — дерзко и узнаваемо.'},{name:'Temp Fade',en:'temp fade haircut men',why:'Чёткие линии у висков создают уличный образ.'},{name:'Mullet Modern',en:'modern mullet haircut men',why:'Смелый выбор для тех кто не боится выделяться.'}],
+      sport:   [{name:'Military Cut',en:'military haircut men short',why:'Максимально практично, не мешает при активности.'},{name:'Induction Cut',en:'induction cut men',why:'Очень коротко — никакого обслуживания.'},{name:'High & Tight',en:'high and tight haircut men',why:'Спортивный классик — чисто и строго.'}],
+    },
+    medium: {
+      classic: [{name:'Side Part Medium',en:'side part medium length men haircut',why:'Классический пробор средней длины — всегда актуально.'},{name:'Slick Back',en:'slick back haircut men medium',why:'Зачёсанные назад волосы — стильно и строго.'},{name:'Pompadour',en:'pompadour haircut men classic',why:'Объёмный кварта создаёт выразительный силуэт.'}],
+      modern:  [{name:'Modern Quiff',en:'modern quiff haircut men 2024',why:'Объём спереди с fade боками — топ тренд.'},{name:'Textured Fringe',en:'textured fringe haircut men',why:'Небрежная чёлка с текстурой — модно и легко.'},{name:'Flow Haircut',en:'flow haircut men medium',why:'Свободные волосы назад — непринуждённо и стильно.'}],
+      street:  [{name:'Two Block',en:'two block haircut men korean',why:'Корейский стиль — длина сверху, чисто по бокам.'},{name:'Curtains',en:'curtains haircut men middle part',why:'Пробор посередине — возврат 90-х в современном исполнении.'},{name:'Wolf Cut',en:'wolf cut men medium',why:'Рваные слои создают объём и характер.'}],
+      sport:   [{name:'Undercut Sport',en:'undercut men sport haircut',why:'Длина сверху, коротко по бокам — практично при активности.'},{name:'Soccer Player Cut',en:'soccer player haircut men medium',why:'Как у футболистов — стильно и не мешает.'},{name:'Taper Medium',en:'taper fade medium haircut men',why:'Постепенный переход — аккуратно при любой активности.'}],
+    },
+    fade: {
+      classic: [{name:'Low Fade Comb Over',en:'low fade comb over haircut men',why:'Нижний fade с зачёсом — элегантно и современно.'},{name:'Mid Fade Side Part',en:'mid fade side part men',why:'Классический пробор с градиентом по бокам.'},{name:'Taper Fade Classic',en:'taper fade classic men haircut',why:'Плавный переход — чисто и профессионально.'}],
+      modern:  [{name:'High Fade Textured',en:'high fade textured top men 2024',why:'Высокий fade с текстурированной макушкой — топ тренд.'},{name:'Skin Fade Quiff',en:'skin fade quiff men haircut',why:'Налысо по бокам с объёмом сверху — контрастно и смело.'},{name:'Drop Fade',en:'drop fade haircut men',why:'Fade опускается за ухом — создаёт уникальный силуэт.'}],
+      street:  [{name:'Bald Fade Design',en:'bald fade with design haircut men',why:'Можно добавить рисунок — максимально уличный стиль.'},{name:'High Top Fade',en:'high top fade men haircut',why:'Высокая плоская макушка с чистыми боками.'},{name:'Mohawk Fade',en:'mohawk fade men haircut',why:'Дорожка посередине с fade — дерзко и смело.'}],
+      sport:   [{name:'Buzz Fade',en:'buzz fade men haircut',why:'Короткий buzz с градиентом — идеально для спорта.'},{name:'Clean Fade',en:'clean fade men barbershop',why:'Максимально чисто, минимум ухода.'},{name:'Taper Short',en:'taper haircut short men sport',why:'Практично, стильно, не мешает при тренировках.'}],
+    },
+    long: {
+      classic: [{name:'Long Slick Back',en:'long slick back men classic haircut',why:'Длинные волосы назад — элегантно и мощно.'},{name:'Gentleman Long',en:'gentleman long hair men style',why:'Ухоженные длинные волосы — аристократичный образ.'},{name:'Long Side Part',en:'long hair side part men',why:'Классический пробор с длиной — строго и красиво.'}],
+      modern:  [{name:'Modern Shag',en:'modern shag haircut men long',why:'Рваные слои и текстура — актуальный рок-стиль.'},{name:'Bun Undercut',en:'undercut man bun men haircut',why:'Пучок сверху с undercut боками — модно и практично.'},{name:'Long Wolf Cut',en:'long wolf cut men 2024',why:'Объёмные слои — самый трендовый длинный стиль.'}],
+      street:  [{name:'Dreadlocks',en:'dreadlocks men style',why:'Максимально свободный уличный образ.'},{name:'Long Curtains',en:'long curtains haircut men',why:'Длинный пробор посередине — свободно и стильно.'},{name:'Surfer Hair',en:'surfer hair men long',why:'Волнистые длинные волосы — пляжный расслабленный стиль.'}],
+      sport:   [{name:'Long Taper',en:'long hair taper men',why:'Длина сверху с чистыми боками — удобно при активности.'},{name:'Man Bun',en:'man bun men athletic',why:'Собрать в пучок — практичное решение для спорта.'},{name:'Half Up Half Down',en:'half up half down men long hair',why:'Универсально — можно носить по-разному.'}],
+    },
+  },
+};
 
-let photoBase64 = null;
-let photoMime = 'image/jpeg';
-let stepInterval = null;
+// Для остальных форм лица — используем oval как базу с модифицированными советами
+const TIPS = {
+  round: 'Круглое лицо — добавляй объём сверху и держи бока короткими. Избегай стрижек, расширяющих стороны.',
+  square: 'Квадратное лицо — мягкие текстурные стрижки смягчат угловатость. Избегай слишком коротких боков.',
+  rect: 'Прямоугольное лицо — добавляй объём по бокам, держи макушку не слишком высокой.',
+  tri: 'Треугольное лицо — объём снизу и короткие бока создадут баланс.',
+  dia: 'Ромбовидное лицо — добавляй объём на макушке и у висков для баланса широких скул.',
+};
 
-const steps = [
-  ['Подключаюсь к серверу...', 'Инициализация'],
-  ['Анализирую форму лица...', 'GigaChat обрабатывает фото'],
-  ['Определяю тип волос...', 'Изучаю параметры'],
-  ['Подбираю стрижки...', 'Почти готово'],
-];
+// ══════════════════════════════════════
+// СОСТОЯНИЕ
+// ══════════════════════════════════════
+let face = null, faceLabel = '';
+let len = null, lenLabel = '';
+let style = null, styleLabel = '';
 
-document.getElementById('fileCamera').addEventListener('change', function(e){
-  handleFile(e.target.files[0]);
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev){
-    const img = new Image();
-    img.onload = function(){
-      const canvas = document.createElement('canvas');
-      const maxSize = 800;
-      let w = img.width, h = img.height;
-      if(w > maxSize || h > maxSize){
-        if(w > h){ h = Math.round(h*maxSize/w); w = maxSize; }
-        else{ w = Math.round(w*maxSize/h); h = maxSize; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const compressed = canvas.toDataURL('image/jpeg', 0.8);
-      photoBase64 = compressed.split(',')[1];
-      photoMime = 'image/jpeg';
-      const zone = document.getElementById('uploadZone');
-      zone.innerHTML = `
-        <img src="${compressed}" alt="Фото">
-        <div class="overlay">
-          <div style="font-size:28px">✅</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:8px;">Фото загружено</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;">Нажми чтобы сменить</div>
-        </div>`;
-      zone.classList.add('has-photo');
-      document.getElementById('analyzeBtn').disabled = false;
-      hideError();
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('fileGallery').addEventListener('change', function(e){
-  document.getElementById('fileCamera').dispatchEvent(Object.assign(new Event('change'), {target: e.target}));
-});
-
-// Общий обработчик файла
-function handleFile(file){
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev){
-    const img = new Image();
-    img.onload = function(){
-      const canvas = document.createElement('canvas');
-      const maxSize = 800;
-      let w = img.width, h = img.height;
-      if(w > maxSize || h > maxSize){
-        if(w > h){ h = Math.round(h*maxSize/w); w = maxSize; }
-        else{ w = Math.round(w*maxSize/h); h = maxSize; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const compressed = canvas.toDataURL('image/jpeg', 0.8);
-      photoBase64 = compressed.split(',')[1];
-      photoMime = 'image/jpeg';
-      const zone = document.getElementById('uploadZone');
-      zone.innerHTML = `
-        <img src="${compressed}" alt="Фото">
-        <div class="overlay">
-          <div style="font-size:28px">✅</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:8px;">Фото загружено</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;">Нажми чтобы сменить</div>
-        </div>`;
-      zone.classList.add('has-photo');
-      document.getElementById('analyzeBtn').disabled = false;
-      hideError();
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+function select1(val, label){
+  face = val; faceLabel = label;
+  document.querySelectorAll('#step1 .option').forEach(o => o.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('next1').disabled = false;
+}
+function select2(val, label){
+  len = val; lenLabel = label;
+  document.querySelectorAll('#step2 .option').forEach(o => o.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('next2').disabled = false;
+}
+function select3(val, label){
+  style = val; styleLabel = label;
+  document.querySelectorAll('#step3 .option').forEach(o => o.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('next3').disabled = false;
 }
 
-document.getElementById('fileGallery').addEventListener('change', function(e){
-  handleFile(e.target.files[0]);
-});
-
-function startSteps(){
-  let i = 0;
-  setStep(steps[0]);
-  stepInterval = setInterval(() => {
-    i = (i + 1) % steps.length;
-    setStep(steps[i]);
-  }, 4000);
+function goStep(n){
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  updateProgress(n);
+  window.scrollTo(0,0);
 }
 
-function stopSteps(){
-  if(stepInterval) clearInterval(stepInterval);
-}
-
-function setStep([text, sub]){
-  document.getElementById('loaderText').textContent = text;
-  document.getElementById('loaderStep').textContent = sub;
-}
-
-async function analyze(){
-  if(!photoBase64) return;
-  const btn = document.getElementById('analyzeBtn');
-  btn.disabled = true;
-  hideError();
-  document.getElementById('loader').classList.add('show');
-  document.getElementById('resultBox').classList.remove('show');
-  startSteps();
-
-  try {
-    const res = await fetch(`${SERVER_URL}/analyze`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageBase64: photoBase64, mimeType: photoMime })
-    });
-    if(!res.ok) throw new Error('Сервер вернул ' + res.status);
-    const result = await res.json();
-    if(result.error) throw new Error(result.error);
-    stopSteps();
-    showResult(result);
-  } catch(err){
-    stopSteps();
-    document.getElementById('loader').classList.remove('show');
-    btn.disabled = false;
-    showError('Ошибка: ' + err.message + '\n\nЕсли сервер только проснулся — подожди 30 сек и попробуй снова.');
+function updateProgress(n){
+  for(let i=1;i<=3;i++){
+    document.getElementById('dot'+i).classList.toggle('done', i < n);
   }
 }
 
-function showResult(r){
-  document.getElementById('faceParams').innerHTML = [
-    {n:'Форма лица', v: r.face_shape || '—'},
-    {n:'Тип волос',  v: r.hair_type  || '—'},
-  ].map(p=>`<div class="face-param"><div class="pn">${p.n}</div><div class="pv">${p.v}</div></div>`).join('');
-  document.getElementById('aiText').textContent = r.summary || '';
+function showResult(){
+  // Получаем стрижки
+  const faceKey = (face === 'oval') ? 'oval' : 'oval'; // все формы используют базу oval
+  const cuts = DB.oval[len]?.[style] || DB.oval.fade.modern;
+  const tip = TIPS[face] || DB.oval.tip;
 
-  const cuts = r.cuts || [];
-  document.getElementById('cutsSection').innerHTML = `
-    <div class="cuts-label">Рекомендованные стрижки</div>
-    ${cuts.map((c,i)=>`
-      <div class="cut-card">
-        <div class="cut-header">
-          <div class="cut-num">${i+1}</div>
-          <div>
-            <div class="cut-name">${c.name}</div>
-            <div class="cut-desc">${c.name_en}</div>
-          </div>
+  document.getElementById('rFace').textContent = faceLabel;
+  document.getElementById('rLen').textContent = lenLabel;
+  document.getElementById('rStyle').textContent = styleLabel;
+  document.getElementById('rTip').textContent = tip;
+
+  document.getElementById('cutsContainer').innerHTML = cuts.map((c,i) => `
+    <div class="cut-card">
+      <div class="cut-top">
+        <div class="cut-num">${i+1}</div>
+        <div>
+          <div class="cut-name">${c.name}</div>
+          <div class="cut-name-en">${c.en.split(' ').slice(0,3).join(' ')}</div>
         </div>
-        <div class="cut-why">${c.why}</div>
-        <a class="pinterest-btn"
-           href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(c.name_en + ' haircut men barbershop')}"
-           target="_blank">
-          📌 Смотреть примеры на Pinterest
-        </a>
       </div>
-    `).join('')}`;
+      <div class="cut-why">${c.why}</div>
+      <a class="pin-btn"
+         href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(c.en)}"
+         target="_blank">
+        📌 Смотреть примеры на Pinterest
+      </a>
+    </div>
+  `).join('');
 
-  document.getElementById('loader').classList.remove('show');
-  document.getElementById('resultBox').classList.add('show');
-  document.getElementById('analyzeBtn').disabled = false;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('stepResult').classList.add('active');
+  document.querySelectorAll('.progress-dot').forEach(d => d.classList.add('done'));
+  window.scrollTo(0,0);
 }
 
-function showError(m){ const b=document.getElementById('errorBox'); b.textContent=m; b.classList.add('show'); }
-function hideError(){ document.getElementById('errorBox').classList.remove('show'); }
+function restart(){
+  face = null; len = null; style = null;
+  faceLabel = ''; lenLabel = ''; styleLabel = '';
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  document.getElementById('next1').disabled = true;
+  document.getElementById('next2').disabled = true;
+  document.getElementById('next3').disabled = true;
+  goStep(1);
+  updateProgress(1);
+}
 </script>
 </body>
 </html>
