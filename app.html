@@ -44,7 +44,7 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
   border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .loader-text{font-size:13px;color:rgba(255,255,255,0.5);text-align:center;}
-.loader-step{font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;}
+.loader-step{font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;text-align:center;}
 .result-box{display:none;margin-bottom:20px;}
 .result-box.show{display:block;}
 .face-analysis{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.03));
@@ -60,25 +60,20 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 .cuts-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
   color:rgba(255,255,255,0.3);margin-bottom:12px;}
 .cut-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
-  border-radius:18px;overflow:hidden;margin-bottom:12px;}
-.cut-header{padding:16px 16px 12px;display:flex;align-items:center;gap:12px;}
+  border-radius:18px;overflow:hidden;margin-bottom:12px;padding:16px;}
+.cut-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
 .cut-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:600;flex-shrink:0;}
 .cut-name{font-size:16px;font-weight:600;}
 .cut-desc{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
-.cut-why{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;padding:0 16px 14px;}
-.cut-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
-.cut-photo{aspect-ratio:1;overflow:hidden;position:relative;background:rgba(255,255,255,0.04);}
-.cut-photo img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
-.cut-photo img:active{transform:scale(1.05);}
-.cut-photo .photo-loader{position:absolute;inset:0;display:flex;align-items:center;
-  justify-content:center;font-size:20px;color:rgba(255,255,255,0.2);}
-.search-btn{display:flex;align-items:center;justify-content:center;gap:8px;
-  margin:10px 16px 16px;padding:11px;border-radius:12px;
-  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
-  color:rgba(255,255,255,0.6);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
-  text-decoration:none;}
+.cut-why{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:14px;}
+.pinterest-btn{display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px;border-radius:12px;
+  background:rgba(230,0,35,0.12);border:1px solid rgba(230,0,35,0.25);
+  color:rgba(255,120,120,0.9);font-size:12px;letter-spacing:0.06em;
+  text-decoration:none;font-weight:500;}
+.pinterest-btn:active{opacity:0.7;}
 .book-cta{background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));
   border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:20px;text-align:center;}
 .book-cta .bt{font-size:15px;font-weight:600;margin-bottom:6px;}
@@ -137,17 +132,18 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 </div>
 
 <script>
-// ════════════════════════════════════════
-// КОНФИГ
-// После деплоя на Render — вставь свой URL сюда:
 const SERVER_URL = 'https://shuha.onrender.com';
-
-// Pexels ключ — бесплатно на pexels.com/api:
-const PEXELS_KEY = 'ВСТАВЬ_PEXELS_КЛЮЧ';
-// ════════════════════════════════════════
 
 let photoBase64 = null;
 let photoMime = 'image/jpeg';
+let stepInterval = null;
+
+const steps = [
+  ['Подключаюсь к серверу...', 'Инициализация'],
+  ['Анализирую форму лица...', 'GigaChat обрабатывает фото'],
+  ['Определяю тип волос...', 'Изучаю параметры'],
+  ['Подбираю стрижки...', 'Почти готово'],
+];
 
 document.getElementById('fileInput').addEventListener('change', function(e){
   const file = e.target.files[0];
@@ -185,6 +181,24 @@ document.getElementById('fileInput').addEventListener('change', function(e){
   reader.readAsDataURL(file);
 });
 
+function startSteps(){
+  let i = 0;
+  setStep(steps[0]);
+  stepInterval = setInterval(() => {
+    i = (i + 1) % steps.length;
+    setStep(steps[i]);
+  }, 4000);
+}
+
+function stopSteps(){
+  if(stepInterval) clearInterval(stepInterval);
+}
+
+function setStep([text, sub]){
+  document.getElementById('loaderText').textContent = text;
+  document.getElementById('loaderStep').textContent = sub;
+}
+
 async function analyze(){
   if(!photoBase64) return;
   const btn = document.getElementById('analyzeBtn');
@@ -192,7 +206,7 @@ async function analyze(){
   hideError();
   document.getElementById('loader').classList.add('show');
   document.getElementById('resultBox').classList.remove('show');
-  setLoader('Анализирую форму лица...', 'GigaChat обрабатывает фото');
+  startSteps();
 
   try {
     const res = await fetch(`${SERVER_URL}/analyze`, {
@@ -203,16 +217,17 @@ async function analyze(){
     if(!res.ok) throw new Error('Сервер вернул ' + res.status);
     const result = await res.json();
     if(result.error) throw new Error(result.error);
-    setLoader('Подбираю фото стрижек...', 'Загружаю из Pexels');
-    await showResult(result);
+    stopSteps();
+    showResult(result);
   } catch(err){
+    stopSteps();
     document.getElementById('loader').classList.remove('show');
     btn.disabled = false;
-    showError('Ошибка: ' + err.message);
+    showError('Ошибка: ' + err.message + '\n\nЕсли сервер только проснулся — подожди 30 сек и попробуй снова.');
   }
 }
 
-async function showResult(r){
+function showResult(r){
   document.getElementById('faceParams').innerHTML = [
     {n:'Форма лица', v: r.face_shape || '—'},
     {n:'Тип волос',  v: r.hair_type  || '—'},
@@ -232,53 +247,19 @@ async function showResult(r){
           </div>
         </div>
         <div class="cut-why">${c.why}</div>
-        <div class="cut-photos" id="photos-${i}">
-          <div class="cut-photo"><div class="photo-loader">⏳</div></div>
-          <div class="cut-photo"><div class="photo-loader">⏳</div></div>
-          <div class="cut-photo"><div class="photo-loader">⏳</div></div>
-        </div>
-        <a class="search-btn"
-           href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(c.name_en + ' haircut men')}"
-           target="_blank">📌 Больше фото на Pinterest</a>
+        <a class="pinterest-btn"
+           href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(c.name_en + ' haircut men barbershop')}"
+           target="_blank">
+          📌 Смотреть примеры на Pinterest
+        </a>
       </div>
     `).join('')}`;
 
   document.getElementById('loader').classList.remove('show');
   document.getElementById('resultBox').classList.add('show');
   document.getElementById('analyzeBtn').disabled = false;
-
-  await Promise.all(cuts.map((c,i) => loadPexels(c.pexels_query, i)));
 }
 
-async function loadPexels(query, idx){
-  const container = document.getElementById(`photos-${idx}`);
-  if(!container) return;
-  if(!PEXELS_KEY || PEXELS_KEY === 'ВСТАВЬ_PEXELS_КЛЮЧ'){
-    container.innerHTML = `<div class="cut-photo" style="grid-column:1/-1;aspect-ratio:3/1;">
-      <div class="photo-loader" style="flex-direction:column;gap:6px;font-size:11px;color:rgba(255,255,255,0.3);">🔑 Вставь Pexels ключ</div>
-    </div>`;
-    return;
-  }
-  try {
-    const res = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=3&orientation=square`,
-      { headers: { 'Authorization': PEXELS_KEY } }
-    );
-    const data = await res.json();
-    const photos = data.photos || [];
-    if(!photos.length){ container.innerHTML = ''; return; }
-    container.innerHTML = photos.map(p=>`
-      <div class="cut-photo">
-        <img src="${p.src.medium}" alt="стрижка" loading="lazy"
-          onerror="this.parentElement.innerHTML='<div class=\\'photo-loader\\'>📷</div>'">
-      </div>`).join('');
-  } catch(e){ container.innerHTML = ''; }
-}
-
-function setLoader(t,s){
-  document.getElementById('loaderText').textContent=t;
-  document.getElementById('loaderStep').textContent=s;
-}
 function showError(m){ const b=document.getElementById('errorBox'); b.textContent=m; b.classList.add('show'); }
 function hideError(){ document.getElementById('errorBox').classList.remove('show'); }
 </script>
