@@ -352,10 +352,15 @@ function showResult(){
         </div>
       </div>
       <div class="cut-why">${c.why}</div>
+      <div class="cut-photos" id="photos-${i}">
+        <div class="cut-photo"><div class="ph">⏳</div></div>
+        <div class="cut-photo"><div class="ph">⏳</div></div>
+        <div class="cut-photo"><div class="ph">⏳</div></div>
+      </div>
       <a class="pin-btn"
          href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(c.en)}"
          target="_blank">
-        📌 Смотреть примеры на Pinterest
+        📌 Смотреть больше на Pinterest
       </a>
     </div>
   `).join('');
@@ -364,7 +369,9 @@ function showResult(){
   document.getElementById('stepResult').classList.add('active');
   document.querySelectorAll('.progress-dot').forEach(d => d.classList.add('done'));
   window.scrollTo(0,0);
-}
+
+  // Загружаем фото
+  cuts.forEach((c,i) => loadPhotos(c.en, i));
 
 function restart(){
   face = null; len = null; style = null;
