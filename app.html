@@ -357,11 +357,6 @@ function showResult(){
         <div class="cut-photo"><div class="ph">⏳</div></div>
         <div class="cut-photo"><div class="ph">⏳</div></div>
       </div>
-      <a class="pin-btn"
-         href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(c.en)}"
-         target="_blank">
-        📌 Смотреть больше на Pinterest
-      </a>
     </div>
   `).join('');
 
@@ -372,6 +367,7 @@ function showResult(){
 
   // Загружаем фото
   cuts.forEach((c,i) => loadPhotos(c.en, i));
+}
 
 function restart(){
   face = null; len = null; style = null;
