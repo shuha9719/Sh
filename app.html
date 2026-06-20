@@ -87,6 +87,10 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
   background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);
   font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#fff;font-weight:600;
   text-decoration:none;}
+.cut-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:12px;border-radius:12px;overflow:hidden;}
+.cut-photo{aspect-ratio:1;overflow:hidden;background:rgba(255,255,255,0.04);position:relative;}
+.cut-photo img{width:100%;height:100%;object-fit:cover;}
+.cut-photo .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,0.15);}
 </style>
 </head>
 <body>
@@ -271,9 +275,26 @@ const TIPS = {
   dia: 'Ромбовидное лицо — добавляй объём на макушке и у висков для баланса широких скул.',
 };
 
-// ══════════════════════════════════════
-// СОСТОЯНИЕ
-// ══════════════════════════════════════
+const PEXELS_KEY = 'YstCNGN1pvazhgHtPd0z3E1whf7FER7WEnC3koB16hQvib7KbTUUVUyz';
+
+async function loadPhotos(query, idx){
+  const container = document.getElementById(`photos-${idx}`);
+  if(!container) return;
+  try {
+    const res = await fetch(
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=3&orientation=square`,
+      { headers: { 'Authorization': PEXELS_KEY } }
+    );
+    const data = await res.json();
+    const photos = data.photos || [];
+    if(!photos.length){ container.innerHTML=''; return; }
+    container.innerHTML = photos.map(p=>`
+      <div class="cut-photo">
+        <img src="${p.src.medium}" loading="lazy"
+          onerror="this.parentElement.innerHTML='<div class=\\'ph\\'>📷</div>'">
+      </div>`).join('');
+  } catch(e){ container.innerHTML=''; }
+}
 let face = null, faceLabel = '';
 let len = null, lenLabel = '';
 let style = null, styleLabel = '';
