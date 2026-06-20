@@ -7,123 +7,103 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans-serif;}
 .topbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;
-  padding:13px 18px;background:rgba(6,8,15,0.92);border-bottom:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(16px);}
+  padding:13px 18px;background:rgba(6,8,15,0.92);border-bottom:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);}
 .logo{font-family:'Syncopate';font-weight:700;font-size:12px;letter-spacing:0.2em;}
-.back-btn{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;
-  border-radius:16px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
-  color:rgba(255,255,255,0.6);text-decoration:none;}
+.back-btn{font-size:11px;text-transform:uppercase;padding:7px 14px;border-radius:16px;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);text-decoration:none;}
 .main{padding:76px 16px 40px;}
 .step{display:none;}
 .step.active{display:block;}
 .step-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:6px;}
-.step-title{font-size:22px;font-weight:600;margin-bottom:20px;line-height:1.3;}
+.step-title{font-size:22px;font-weight:600;margin-bottom:20px;}
 .progress{display:flex;gap:6px;margin-bottom:28px;}
 .progress-dot{height:3px;border-radius:2px;flex:1;background:rgba(255,255,255,0.1);transition:background .3s;}
-.progress-dot.done{background:rgba(255,255,255,0.8);}
+.progress-dot.done{background:#fff;}
 .options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
 .option{padding:16px 12px;border-radius:18px;border:2px solid rgba(255,255,255,0.08);
-  background:rgba(255,255,255,0.03);cursor:pointer;text-align:center;transition:all .2s;
-  -webkit-tap-highlight-color:transparent;user-select:none;}
-.option.selected{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);}
-.option-icon{font-size:32px;margin-bottom:8px;}
+  background:rgba(255,255,255,0.03);text-align:center;transition:all .2s;cursor:pointer;}
+.option.selected{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.12);}
+.option-icon{font-size:28px;margin-bottom:6px;}
 .option-name{font-size:13px;font-weight:600;}
-.option-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;line-height:1.4;}
-.next-btn{width:100%;padding:16px;border-radius:18px;border:none;cursor:pointer;
-  font-family:'Inter';font-size:14px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
-  background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));
-  border:1px solid rgba(255,255,255,0.25);color:#fff;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);transition:all .2s;}
+.option-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;}
+.next-btn{width:100%;padding:16px;border-radius:18px;border:1px solid rgba(255,255,255,0.25);
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,255,255,0.05));
+  color:#fff;font-size:14px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;}
 .next-btn:disabled{opacity:0.3;cursor:not-allowed;}
-.result-header{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.03));
-  border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:20px;margin-bottom:16px;}
-.result-header .rl{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;}
+.result-header{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+  border-radius:20px;padding:20px;margin-bottom:16px;}
 .result-params{display:flex;gap:8px;margin-bottom:12px;}
-.result-param{background:rgba(255,255,255,0.06);border-radius:12px;padding:8px 10px;flex:1;text-align:center;}
-.result-param .rn{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:3px;}
-.result-param .rv{font-size:11px;font-weight:600;}
-.result-tip{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;}
+.rp{background:rgba(255,255,255,0.06);border-radius:12px;padding:8px;flex:1;text-align:center;}
+.rp .rn{font-size:9px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:3px;letter-spacing:0.1em;}
+.rp .rv{font-size:12px;font-weight:600;}
+.rtip{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;}
 .cuts-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;}
-.cut-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
-  border-radius:18px;overflow:hidden;margin-bottom:12px;padding:16px;}
+.cut-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:18px;overflow:hidden;margin-bottom:12px;padding:16px;}
 .cut-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.cut-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:600;flex-shrink:0;}
-.cut-name{font-size:16px;font-weight:600;}
-.cut-name-en{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.cut-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;}
+.cut-name{font-size:15px;font-weight:600;}
+.cut-en{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;}
 .cut-why{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:12px;}
-.cut-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:12px;overflow:hidden;}
-.cut-photo{aspect-ratio:1;overflow:hidden;background:rgba(255,255,255,0.04);position:relative;}
-.cut-photo img{width:100%;height:100%;object-fit:cover;}
-.cut-photo .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,0.15);}
-.restart-btn{width:100%;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.12);
-  background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);font-family:'Inter';
-  font-size:13px;cursor:pointer;margin-bottom:16px;margin-top:4px;}
-.book-cta{background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));
-  border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:20px;text-align:center;}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:10px;overflow:hidden;}
+.photo{aspect-ratio:1;background:rgba(255,255,255,0.04);overflow:hidden;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.15);font-size:16px;}
+.photo img{width:100%;height:100%;object-fit:cover;}
+.restart-btn{width:100%;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.4);font-size:13px;cursor:pointer;margin-bottom:16px;margin-top:4px;}
+.book-cta{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:20px;text-align:center;}
 .book-cta .bt{font-size:15px;font-weight:600;margin-bottom:6px;}
-.book-cta .bs{font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:16px;}
-.book-cta .bb{display:inline-block;padding:13px 32px;border-radius:20px;
-  background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);
-  font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#fff;font-weight:600;
-  text-decoration:none;}
+.book-cta .bs{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:16px;}
+.book-cta .bb{display:inline-block;padding:13px 32px;border-radius:20px;background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;font-weight:600;text-decoration:none;}
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <div class="logo">S&H · Подбор стрижки</div>
   <a class="back-btn" href="index.html">← Назад</a>
 </div>
-
 <div class="main">
   <div class="progress">
-    <div class="progress-dot" id="dot1"></div>
-    <div class="progress-dot" id="dot2"></div>
-    <div class="progress-dot" id="dot3"></div>
+    <div class="progress-dot" id="d1"></div>
+    <div class="progress-dot" id="d2"></div>
+    <div class="progress-dot" id="d3"></div>
   </div>
 
-  <!-- Шаг 1 -->
-  <div class="step active" id="step1">
+  <div class="step active" id="s1">
     <div class="step-label">Шаг 1 из 3</div>
     <div class="step-title">Какая форма лица?</div>
-    <div class="options" id="opts1"></div>
-    <button class="next-btn" id="next1" disabled onclick="goStep(2)">Далее →</button>
+    <div class="options" id="o1"></div>
+    <button class="next-btn" id="n1" disabled onclick="goStep(2)">Далее →</button>
   </div>
 
-  <!-- Шаг 2 -->
-  <div class="step" id="step2">
+  <div class="step" id="s2">
     <div class="step-label">Шаг 2 из 3</div>
     <div class="step-title">Какую длину предпочитаешь?</div>
-    <div class="options" id="opts2"></div>
-    <button class="next-btn" id="next2" disabled onclick="goStep(3)">Далее →</button>
+    <div class="options" id="o2"></div>
+    <button class="next-btn" id="n2" disabled onclick="goStep(3)">Далее →</button>
   </div>
 
-  <!-- Шаг 3 -->
-  <div class="step" id="step3">
+  <div class="step" id="s3">
     <div class="step-label">Шаг 3 из 3</div>
     <div class="step-title">Какой стиль ближе?</div>
-    <div class="options" id="opts3"></div>
-    <button class="next-btn" id="next3" disabled onclick="showResult()">Подобрать ✂️</button>
+    <div class="options" id="o3"></div>
+    <button class="next-btn" id="n3" disabled onclick="showResult()">Подобрать ✂️</button>
   </div>
 
-  <!-- Результат -->
-  <div class="step" id="stepResult">
+  <div class="step" id="sR">
     <div class="result-header">
-      <div class="rl">Твой профиль</div>
       <div class="result-params">
-        <div class="result-param"><div class="rn">Лицо</div><div class="rv" id="rFace">—</div></div>
-        <div class="result-param"><div class="rn">Длина</div><div class="rv" id="rLen">—</div></div>
-        <div class="result-param"><div class="rn">Стиль</div><div class="rv" id="rStyle">—</div></div>
+        <div class="rp"><div class="rn">Лицо</div><div class="rv" id="rF"></div></div>
+        <div class="rp"><div class="rn">Длина</div><div class="rv" id="rL"></div></div>
+        <div class="rp"><div class="rn">Стиль</div><div class="rv" id="rS"></div></div>
       </div>
-      <div class="result-tip" id="rTip"></div>
+      <div class="rtip" id="rT"></div>
     </div>
     <div class="cuts-label">Рекомендованные стрижки</div>
-    <div id="cutsContainer"></div>
-    <button class="restart-btn" onclick="restart()">← Подобрать заново</button>
+    <div id="cuts"></div>
+    <button class="restart-btn" onclick="init()">← Подобрать заново</button>
     <div class="book-cta">
       <div class="bt">Понравилась идея?</div>
       <div class="bs">Запишись к Шухрату — воплотим вместе</div>
@@ -133,159 +113,152 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 </div>
 
 <script>
-const PEXELS_KEY = 'YstCNGN1pvazhgHtPd0z3E1whf7FER7WEnC3koB16hQvib7KbTUUVUyz';
+var PEXELS = 'YstCNGN1pvazhgHtPd0z3E1whf7FER7WEnC3koB16hQvib7KbTUUVUyz';
 
-const FACES = [
-  {val:'oval', icon:'🥚', name:'Овальное', desc:'Вытянутое, узкий подбородок'},
-  {val:'round', icon:'🔵', name:'Круглое', desc:'Широкие щёки, мягкий подбородок'},
-  {val:'square', icon:'⬜', name:'Квадратное', desc:'Широкая скула и подбородок'},
-  {val:'rect', icon:'📱', name:'Прямоугольное', desc:'Длинное, угловатый подбородок'},
-  {val:'tri', icon:'🔺', name:'Треугольное', desc:'Широкий лоб, узкий подбородок'},
-  {val:'dia', icon:'💎', name:'Ромбовидное', desc:'Широкие скулы, узкий лоб'},
-];
-const LENGTHS = [
-  {val:'short', icon:'⚡', name:'Короткая', desc:'Чистый, опрятный вид'},
-  {val:'medium', icon:'✂️', name:'Средняя', desc:'Универсально и стильно'},
-  {val:'fade', icon:'🎯', name:'Fade / Тейпер', desc:'Градиент по бокам'},
-  {val:'long', icon:'🌊', name:'Длинная', desc:'Свободный стиль'},
-];
-const STYLES = [
-  {val:'classic', icon:'👔', name:'Классика', desc:'Строго и элегантно'},
-  {val:'modern', icon:'🔥', name:'Современный', desc:'Трендово и модно'},
-  {val:'street', icon:'🧢', name:'Уличный', desc:'Дерзко и свободно'},
-  {val:'sport', icon:'💪', name:'Спортивный', desc:'Практично и чисто'},
-];
+var F=['oval','round','square','rect','tri','dia'];
+var FL=['Овальное','Круглое','Квадратное','Прямоугольное','Треугольное','Ромбовидное'];
+var FI=['🥚','🔵','⬜','📱','🔺','💎'];
+var FD=['Вытянутое, узкий подбородок','Широкие щёки, мягкий подбородок','Широкая скула и подбородок','Длинное, угловатый подбородок','Широкий лоб, узкий подбородок','Широкие скулы, узкий лоб'];
 
-const DB = {
+var L=['short','medium','fade','long'];
+var LL=['Короткая','Средняя','Fade / Тейпер','Длинная'];
+var LI=['⚡','✂️','🎯','🌊'];
+var LD=['Чистый, опрятный вид','Универсально и стильно','Градиент по бокам','Свободный стиль'];
+
+var S=['classic','modern','street','sport'];
+var SL=['Классика','Современный','Уличный','Спортивный'];
+var SI=['👔','🔥','🧢','💪'];
+var SD=['Строго и элегантно','Трендово и модно','Дерзко и свободно','Практично и чисто'];
+
+var TIPS={
+  oval:'Овальное лицо — идеальная форма. Тебе подойдёт практически всё — экспериментируй смело.',
+  round:'Круглое лицо — добавляй объём сверху, держи бока короткими.',
+  square:'Квадратное лицо — мягкие текстурные стрижки смягчат угловатость.',
+  rect:'Прямоугольное лицо — добавляй объём по бокам.',
+  tri:'Треугольное лицо — объём снизу и короткие бока создадут баланс.',
+  dia:'Ромбовидное лицо — добавляй объём на макушке и у висков.'
+};
+
+var DB={
   short:{
-    classic:[{name:'Классический пробор',en:'classic side part haircut men',why:'Чистые линии подчёркивают правильные пропорции лица.'},{name:'Crew Cut',en:'crew cut men barbershop',why:'Аккуратная короткая стрижка, универсальная для любого случая.'},{name:'Ivy League',en:'ivy league haircut men',why:'Элегантно и строго — идеально для бизнеса.'}],
-    modern:[{name:'Textured Crop',en:'textured crop haircut men 2024',why:'Модная текстура сверху с чистыми боками.'},{name:'French Crop',en:'french crop haircut men',why:'Чёлка вперёд — актуальный европейский тренд.'},{name:'Buzz Cut',en:'buzz cut men style',why:'Минималистично и очень чисто.'}],
-    street:[{name:'Edgar Cut',en:'edgar cut haircut men',why:'Резкая прямая чёлка — дерзко и узнаваемо.'},{name:'Temp Fade',en:'temp fade haircut men',why:'Чёткие линии у висков создают уличный образ.'},{name:'Modern Mullet',en:'modern mullet haircut men',why:'Смелый выбор для тех кто не боится выделяться.'}],
-    sport:[{name:'Military Cut',en:'military haircut men short',why:'Максимально практично, не мешает при активности.'},{name:'Induction Cut',en:'induction cut men',why:'Очень коротко — никакого обслуживания.'},{name:'High & Tight',en:'high and tight haircut men',why:'Спортивный классик — чисто и строго.'}],
+    classic:[{n:'Классический пробор',e:'classic side part haircut men',w:'Чистые линии подчёркивают пропорции лица.'},{n:'Crew Cut',e:'crew cut men barbershop',w:'Аккуратная стрижка для любого случая.'},{n:'Ivy League',e:'ivy league haircut men',w:'Элегантно и строго — идеально для бизнеса.'}],
+    modern:[{n:'Textured Crop',e:'textured crop haircut men',w:'Модная текстура сверху с чистыми боками.'},{n:'French Crop',e:'french crop haircut men',w:'Чёлка вперёд — актуальный европейский тренд.'},{n:'Buzz Cut',e:'buzz cut men style',w:'Минималистично и очень чисто.'}],
+    street:[{n:'Edgar Cut',e:'edgar cut haircut men',w:'Резкая прямая чёлка — дерзко и узнаваемо.'},{n:'Temp Fade',e:'temp fade haircut men',w:'Чёткие линии создают уличный образ.'},{n:'Modern Mullet',e:'modern mullet haircut men',w:'Смелый выбор для тех кто не боится выделяться.'}],
+    sport:[{n:'Military Cut',e:'military haircut men short',w:'Максимально практично, не мешает при активности.'},{n:'Induction Cut',e:'induction cut men',w:'Очень коротко — никакого обслуживания.'},{n:'High & Tight',e:'high and tight haircut men',w:'Спортивный классик — чисто и строго.'}]
   },
   medium:{
-    classic:[{name:'Side Part Medium',en:'side part medium length men haircut',why:'Классический пробор средней длины — всегда актуально.'},{name:'Slick Back',en:'slick back haircut men medium',why:'Зачёсанные назад волосы — стильно и строго.'},{name:'Pompadour',en:'pompadour haircut men classic',why:'Объёмный кварта создаёт выразительный силуэт.'}],
-    modern:[{name:'Modern Quiff',en:'modern quiff haircut men 2024',why:'Объём спереди с fade боками — топ тренд.'},{name:'Textured Fringe',en:'textured fringe haircut men',why:'Небрежная чёлка с текстурой — модно и легко.'},{name:'Flow Haircut',en:'flow haircut men medium',why:'Свободные волосы назад — непринуждённо и стильно.'}],
-    street:[{name:'Two Block',en:'two block haircut men korean',why:'Корейский стиль — длина сверху, чисто по бокам.'},{name:'Curtains',en:'curtains haircut men middle part',why:'Пробор посередине — возврат 90-х в современном исполнении.'},{name:'Wolf Cut',en:'wolf cut men medium',why:'Рваные слои создают объём и характер.'}],
-    sport:[{name:'Undercut Sport',en:'undercut men sport haircut',why:'Длина сверху, коротко по бокам — практично.'},{name:'Soccer Player Cut',en:'soccer player haircut men medium',why:'Как у футболистов — стильно и не мешает.'},{name:'Taper Medium',en:'taper fade medium haircut men',why:'Постепенный переход — аккуратно при любой активности.'}],
+    classic:[{n:'Side Part Medium',e:'side part medium length men haircut',w:'Классический пробор средней длины.'},{n:'Slick Back',e:'slick back haircut men medium',w:'Зачёсанные назад волосы — стильно и строго.'},{n:'Pompadour',e:'pompadour haircut men classic',w:'Объёмный силуэт спереди.'}],
+    modern:[{n:'Modern Quiff',e:'modern quiff haircut men',w:'Объём спереди с fade боками — топ тренд.'},{n:'Textured Fringe',e:'textured fringe haircut men',w:'Небрежная чёлка с текстурой.'},{n:'Flow Haircut',e:'flow haircut men medium',w:'Свободные волосы назад.'}],
+    street:[{n:'Two Block',e:'two block haircut men korean',w:'Корейский стиль — длина сверху, чисто по бокам.'},{n:'Curtains',e:'curtains haircut men middle part',w:'Пробор посередине — возврат 90-х.'},{n:'Wolf Cut',e:'wolf cut men medium',w:'Рваные слои создают объём.'}],
+    sport:[{n:'Undercut Sport',e:'undercut men sport haircut',w:'Длина сверху, коротко по бокам.'},{n:'Soccer Player Cut',e:'soccer player haircut men medium',w:'Как у футболистов.'},{n:'Taper Medium',e:'taper fade medium haircut men',w:'Аккуратно при любой активности.'}]
   },
   fade:{
-    classic:[{name:'Low Fade Comb Over',en:'low fade comb over haircut men',why:'Нижний fade с зачёсом — элегантно и современно.'},{name:'Mid Fade Side Part',en:'mid fade side part men',why:'Классический пробор с градиентом по бокам.'},{name:'Taper Fade Classic',en:'taper fade classic men haircut',why:'Плавный переход — чисто и профессионально.'}],
-    modern:[{name:'High Fade Textured',en:'high fade textured top men 2024',why:'Высокий fade с текстурированной макушкой — топ тренд.'},{name:'Skin Fade Quiff',en:'skin fade quiff men haircut',why:'Налысо по бокам с объёмом сверху — контрастно и смело.'},{name:'Drop Fade',en:'drop fade haircut men',why:'Fade опускается за ухом — создаёт уникальный силуэт.'}],
-    street:[{name:'Bald Fade Design',en:'bald fade with design haircut men',why:'Можно добавить рисунок — максимально уличный стиль.'},{name:'High Top Fade',en:'high top fade men haircut',why:'Высокая плоская макушка с чистыми боками.'},{name:'Mohawk Fade',en:'mohawk fade men haircut',why:'Дорожка посередине с fade — дерзко и смело.'}],
-    sport:[{name:'Buzz Fade',en:'buzz fade men haircut',why:'Короткий buzz с градиентом — идеально для спорта.'},{name:'Clean Fade',en:'clean fade men barbershop',why:'Максимально чисто, минимум ухода.'},{name:'Taper Short',en:'taper haircut short men sport',why:'Практично, стильно, не мешает при тренировках.'}],
+    classic:[{n:'Low Fade Comb Over',e:'low fade comb over haircut men',w:'Нижний fade с зачёсом — элегантно.'},{n:'Mid Fade Side Part',e:'mid fade side part men haircut',w:'Классический пробор с градиентом.'},{n:'Taper Fade',e:'taper fade classic men haircut',w:'Плавный переход — чисто и профессионально.'}],
+    modern:[{n:'High Fade Textured',e:'high fade textured top men',w:'Высокий fade с текстурированной макушкой.'},{n:'Skin Fade Quiff',e:'skin fade quiff men haircut',w:'Налысо по бокам с объёмом сверху.'},{n:'Drop Fade',e:'drop fade haircut men',w:'Fade опускается за ухом.'}],
+    street:[{n:'Bald Fade Design',e:'bald fade design haircut men',w:'Рисунок на висках — максимально уличный стиль.'},{n:'High Top Fade',e:'high top fade men haircut',w:'Высокая плоская макушка с чистыми боками.'},{n:'Mohawk Fade',e:'mohawk fade men haircut',w:'Дорожка посередине — дерзко.'}],
+    sport:[{n:'Buzz Fade',e:'buzz fade men haircut',w:'Короткий buzz с градиентом — для спорта.'},{n:'Clean Fade',e:'clean fade men barbershop',w:'Максимально чисто, минимум ухода.'},{n:'Taper Short',e:'taper haircut short men',w:'Практично, не мешает при тренировках.'}]
   },
   long:{
-    classic:[{name:'Long Slick Back',en:'long slick back men classic haircut',why:'Длинные волосы назад — элегантно и мощно.'},{name:'Gentleman Long',en:'gentleman long hair men style',why:'Ухоженные длинные волосы — аристократичный образ.'},{name:'Long Side Part',en:'long hair side part men',why:'Классический пробор с длиной — строго и красиво.'}],
-    modern:[{name:'Modern Shag',en:'modern shag haircut men long',why:'Рваные слои и текстура — актуальный рок-стиль.'},{name:'Bun Undercut',en:'undercut man bun men haircut',why:'Пучок сверху с undercut боками — модно и практично.'},{name:'Long Wolf Cut',en:'long wolf cut men 2024',why:'Объёмные слои — самый трендовый длинный стиль.'}],
-    street:[{name:'Long Curtains',en:'long curtains haircut men',why:'Длинный пробор посередине — свободно и стильно.'},{name:'Surfer Hair',en:'surfer hair men long',why:'Волнистые длинные волосы — пляжный расслабленный стиль.'},{name:'Shaggy Long',en:'shaggy long hair men street',why:'Небрежная длина — уличный свободный образ.'}],
-    sport:[{name:'Man Bun',en:'man bun men athletic',why:'Собрать в пучок — практичное решение для спорта.'},{name:'Long Taper',en:'long hair taper men',why:'Длина сверху с чистыми боками — удобно при активности.'},{name:'Half Up',en:'half up half down men long hair',why:'Универсально — можно носить по-разному.'}],
-  },
+    classic:[{n:'Long Slick Back',e:'long slick back men haircut',w:'Длинные волосы назад — элегантно.'},{n:'Gentleman Long',e:'gentleman long hair men',w:'Ухоженные длинные волосы.'},{n:'Long Side Part',e:'long hair side part men',w:'Классический пробор с длиной.'}],
+    modern:[{n:'Modern Shag',e:'modern shag haircut men long',w:'Рваные слои и текстура.'},{n:'Bun Undercut',e:'undercut man bun men',w:'Пучок с undercut боками.'},{n:'Long Wolf Cut',e:'long wolf cut men',w:'Объёмные слои — трендовый стиль.'}],
+    street:[{n:'Long Curtains',e:'long curtains haircut men',w:'Длинный пробор посередине.'},{n:'Surfer Hair',e:'surfer hair men long',w:'Волнистые длинные волосы.'},{n:'Shaggy Long',e:'shaggy long hair men',w:'Небрежная длина — свободный образ.'}],
+    sport:[{n:'Man Bun',e:'man bun men athletic',w:'Пучок — практично для спорта.'},{n:'Long Taper',e:'long hair taper men',w:'Длина сверху с чистыми боками.'},{n:'Half Up',e:'half up half down men long hair',w:'Универсально — носить по-разному.'}]
+  }
 };
 
-const TIPS = {
-  oval:'Овальное лицо — идеальная форма для любых стрижек. Тебе подойдёт практически всё — экспериментируй смело.',
-  round:'Круглое лицо — добавляй объём сверху и держи бока короткими. Избегай стрижек, расширяющих стороны.',
-  square:'Квадратное лицо — мягкие текстурные стрижки смягчат угловатость. Избегай слишком коротких боков.',
-  rect:'Прямоугольное лицо — добавляй объём по бокам, держи макушку не слишком высокой.',
-  tri:'Треугольное лицо — объём снизу и короткие бока создадут баланс.',
-  dia:'Ромбовидное лицо — добавляй объём на макушке и у висков для баланса широких скул.',
-};
+var selF='', selFL='', selL='', selLL='', selS='', selSL='';
 
-let face='', faceLabel='', len='', lenLabel='', style='', styleLabel='';
-
-function renderOptions(items, container, step) {
-  const el = document.getElementById(container);
-  el.innerHTML = items.map(item => `
-    <div class="option" id="opt_${step}_${item.val}" onclick="selectOpt('${step}','${item.val}','${item.name}')">
-      <div class="option-icon">${item.icon}</div>
-      <div class="option-name">${item.name}</div>
-      <div class="option-desc">${item.desc}</div>
-    </div>
-  `).join('');
+function makeOpts(container, vals, labels, icons, descs, step) {
+  var el = document.getElementById(container);
+  var html = '';
+  for(var i=0; i<vals.length; i++) {
+    html += '<div class="option" id="o'+step+'_'+i+'" data-step="'+step+'" data-idx="'+i+'">';
+    html += '<div class="option-icon">'+icons[i]+'</div>';
+    html += '<div class="option-name">'+labels[i]+'</div>';
+    html += '<div class="option-desc">'+descs[i]+'</div>';
+    html += '</div>';
+  }
+  el.innerHTML = html;
+  var opts = el.querySelectorAll('.option');
+  for(var j=0; j<opts.length; j++) {
+    opts[j].addEventListener('click', (function(step, idx) {
+      return function() { pick(step, idx); };
+    })(step, j));
+  }
 }
 
-function selectOpt(step, val, label) {
-  const allOpts = document.querySelectorAll(`#step${step} .option`);
-  allOpts.forEach(o => o.classList.remove('selected'));
-  document.getElementById(`opt_${step}_${val}`).classList.add('selected');
-  if(step==='1'){ face=val; faceLabel=label; document.getElementById('next1').disabled=false; }
-  if(step==='2'){ len=val; lenLabel=label; document.getElementById('next2').disabled=false; }
-  if(step==='3'){ style=val; styleLabel=label; document.getElementById('next3').disabled=false; }
+function pick(step, idx) {
+  var prefix = 'o'+step+'_';
+  var all = document.querySelectorAll('#o'+step+' .option');
+  for(var i=0; i<all.length; i++) all[i].classList.remove('selected');
+  document.getElementById(prefix+idx).classList.add('selected');
+  if(step===1){ selF=F[idx]; selFL=FL[idx]; document.getElementById('n1').disabled=false; }
+  if(step===2){ selL=L[idx]; selLL=LL[idx]; document.getElementById('n2').disabled=false; }
+  if(step===3){ selS=S[idx]; selSL=SL[idx]; document.getElementById('n3').disabled=false; }
 }
 
 function goStep(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step'+n).classList.add('active');
-  for(let i=1;i<=3;i++) document.getElementById('dot'+i).classList.toggle('done', i<n);
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('s'+n).classList.add('active');
+  for(var i=1;i<=3;i++) document.getElementById('d'+i).classList.toggle('done', i<n);
   window.scrollTo(0,0);
 }
 
 function showResult() {
-  const cuts = DB[len]?.[style] || DB.fade.modern;
-  const tip = TIPS[face] || TIPS.oval;
+  var cuts = (DB[selL] && DB[selL][selS]) ? DB[selL][selS] : DB.fade.modern;
+  document.getElementById('rF').textContent = selFL;
+  document.getElementById('rL').textContent = selLL;
+  document.getElementById('rS').textContent = selSL;
+  document.getElementById('rT').textContent = TIPS[selF] || TIPS.oval;
 
-  document.getElementById('rFace').textContent = faceLabel;
-  document.getElementById('rLen').textContent = lenLabel;
-  document.getElementById('rStyle').textContent = styleLabel;
-  document.getElementById('rTip').textContent = tip;
+  var html = '';
+  for(var i=0; i<cuts.length; i++) {
+    html += '<div class="cut-card">';
+    html += '<div class="cut-top"><div class="cut-num">'+(i+1)+'</div><div>';
+    html += '<div class="cut-name">'+cuts[i].n+'</div>';
+    html += '<div class="cut-en">'+cuts[i].e+'</div></div></div>';
+    html += '<div class="cut-why">'+cuts[i].w+'</div>';
+    html += '<div class="photos" id="ph'+i+'">';
+    html += '<div class="photo">⏳</div><div class="photo">⏳</div><div class="photo">⏳</div>';
+    html += '</div></div>';
+  }
+  document.getElementById('cuts').innerHTML = html;
 
-  document.getElementById('cutsContainer').innerHTML = cuts.map((c,i) => `
-    <div class="cut-card">
-      <div class="cut-top">
-        <div class="cut-num">${i+1}</div>
-        <div>
-          <div class="cut-name">${c.name}</div>
-          <div class="cut-name-en">${c.en}</div>
-        </div>
-      </div>
-      <div class="cut-why">${c.why}</div>
-      <div class="cut-photos" id="photos-${i}">
-        <div class="cut-photo"><div class="ph">⏳</div></div>
-        <div class="cut-photo"><div class="ph">⏳</div></div>
-        <div class="cut-photo"><div class="ph">⏳</div></div>
-      </div>
-    </div>
-  `).join('');
-
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('stepResult').classList.add('active');
-  document.querySelectorAll('.progress-dot').forEach(d => d.classList.add('done'));
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('sR').classList.add('active');
+  document.querySelectorAll('.progress-dot').forEach(function(d){ d.classList.add('done'); });
   window.scrollTo(0,0);
 
-  cuts.forEach((c,i) => loadPhotos(c.en, i));
+  for(var j=0; j<cuts.length; j++) {
+    (function(query, idx){
+      fetch('https://api.pexels.com/v1/search?query='+encodeURIComponent(query)+'&per_page=3&orientation=square',
+        {headers:{'Authorization':PEXELS}})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var photos = d.photos || [];
+        if(!photos.length) return;
+        var c = document.getElementById('ph'+idx);
+        if(!c) return;
+        var h = '';
+        for(var k=0; k<photos.length; k++) h += '<div class="photo"><img src="'+photos[k].src.medium+'"></div>';
+        c.innerHTML = h;
+      }).catch(function(){});
+    })(cuts[j].e, j);
+  }
 }
 
-async function loadPhotos(query, idx) {
-  const container = document.getElementById('photos-'+idx);
-  if(!container) return;
-  try {
-    const res = await fetch(
-      'https://api.pexels.com/v1/search?query='+encodeURIComponent(query)+'&per_page=3&orientation=square',
-      { headers: { 'Authorization': PEXELS_KEY } }
-    );
-    const data = await res.json();
-    const photos = data.photos || [];
-    if(!photos.length){ container.innerHTML=''; return; }
-    container.innerHTML = photos.map(p =>
-      '<div class="cut-photo"><img src="'+p.src.medium+'" loading="lazy"></div>'
-    ).join('');
-  } catch(e) { container.innerHTML=''; }
-}
-
-function restart() {
-  face=''; len=''; style='';
-  faceLabel=''; lenLabel=''; styleLabel='';
-  renderOptions(FACES,'opts1','1');
-  renderOptions(LENGTHS,'opts2','2');
-  renderOptions(STYLES,'opts3','3');
-  document.getElementById('next1').disabled=true;
-  document.getElementById('next2').disabled=true;
-  document.getElementById('next3').disabled=true;
+function init() {
+  selF=''; selFL=''; selL=''; selLL=''; selS=''; selSL='';
+  makeOpts('o1', F, FL, FI, FD, 1);
+  makeOpts('o2', L, LL, LI, LD, 2);
+  makeOpts('o3', S, SL, SI, SD, 3);
+  document.getElementById('n1').disabled=true;
+  document.getElementById('n2').disabled=true;
+  document.getElementById('n3').disabled=true;
   goStep(1);
 }
 
-restart();
+init();
 </script>
 </body>
 </html>
