@@ -8,25 +8,18 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
-
-/* ── TOPBAR ── */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;
   padding:13px 18px;background:rgba(6,8,15,0.92);border-bottom:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+  backdrop-filter:blur(16px);}
 .logo{font-family:'Syncopate';font-weight:700;font-size:12px;letter-spacing:0.2em;}
 .back-btn{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;
   border-radius:16px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
-  color:rgba(255,255,255,0.6);text-decoration:none;cursor:pointer;}
-
-/* ── MAIN ── */
+  color:rgba(255,255,255,0.6);text-decoration:none;}
 .main{padding:70px 16px 40px;}
-
-/* ── UPLOAD ZONE ── */
 .upload-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;
   min-height:220px;border-radius:24px;border:2px dashed rgba(255,255,255,0.15);
   background:rgba(255,255,255,0.03);cursor:pointer;transition:all .3s;margin-bottom:16px;
   position:relative;overflow:hidden;}
-.upload-zone:active{border-color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.06);}
 .upload-zone.has-photo{border-style:solid;border-color:rgba(255,255,255,0.2);}
 .upload-zone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:22px;}
 .upload-zone .overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;flex-direction:column;
@@ -35,8 +28,6 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 .upload-text{font-size:13px;color:rgba(255,255,255,0.5);text-align:center;padding:0 20px;}
 .upload-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:6px;}
 #fileInput{display:none;}
-
-/* ── КНОПКА АНАЛИЗА ── */
 .analyze-btn{width:100%;padding:16px;border-radius:18px;border:none;cursor:pointer;font-family:'Inter';
   font-size:14px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
   background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));
@@ -45,8 +36,6 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
   transition:all .2s;margin-bottom:20px;}
 .analyze-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .analyze-btn:active{transform:scale(0.98);}
-
-/* ── LOADER ── */
 .loader{display:none;flex-direction:column;align-items:center;gap:14px;padding:32px;
   background:rgba(255,255,255,0.04);border-radius:20px;border:1px solid rgba(255,255,255,0.08);
   margin-bottom:20px;}
@@ -55,14 +44,11 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
   border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .loader-text{font-size:13px;color:rgba(255,255,255,0.5);text-align:center;}
-
-/* ── РЕЗУЛЬТАТ АНАЛИЗА ── */
+.loader-step{font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;}
 .result-box{display:none;margin-bottom:20px;}
 .result-box.show{display:block;}
-
 .face-analysis{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.03));
-  border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:20px;margin-bottom:16px;
-  backdrop-filter:blur(16px);}
+  border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:20px;margin-bottom:16px;}
 .face-analysis .label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
   color:rgba(255,255,255,0.3);margin-bottom:10px;}
 .face-params{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
@@ -70,46 +56,40 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 .face-param .pn{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:3px;}
 .face-param .pv{font-size:14px;font-weight:600;}
 .ai-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;}
-
-/* ── СТРИЖКИ ── */
 .cuts-section{margin-bottom:20px;}
 .cuts-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
   color:rgba(255,255,255,0.3);margin-bottom:12px;}
 .cut-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
   border-radius:18px;overflow:hidden;margin-bottom:12px;}
-.cut-card .cut-header{padding:16px 16px 12px;display:flex;align-items:center;gap:12px;}
-.cut-card .cut-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);
+.cut-header{padding:16px 16px 12px;display:flex;align-items:center;gap:12px;}
+.cut-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:600;flex-shrink:0;}
-.cut-card .cut-name{font-size:16px;font-weight:600;}
-.cut-card .cut-desc{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
-.cut-card .cut-why{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;
-  padding:0 16px 14px;}
-
-/* Google фото сетка */
-.cut-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 0 0 0;}
-.cut-photo{aspect-ratio:1;overflow:hidden;position:relative;}
+.cut-name{font-size:16px;font-weight:600;}
+.cut-desc{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
+.cut-why{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;padding:0 16px 14px;}
+.cut-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+.cut-photo{aspect-ratio:1;overflow:hidden;position:relative;background:rgba(255,255,255,0.04);}
 .cut-photo img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
 .cut-photo img:active{transform:scale(1.05);}
-.cut-photo .photo-loader{position:absolute;inset:0;background:rgba(255,255,255,0.04);
-  display:flex;align-items:center;justify-content:center;font-size:20px;}
-
+.cut-photo .photo-loader{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-size:20px;color:rgba(255,255,255,0.2);}
 .search-btn{display:flex;align-items:center;justify-content:center;gap:8px;
   margin:10px 16px 16px;padding:11px;border-radius:12px;
   background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
   color:rgba(255,255,255,0.6);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
-  text-decoration:none;cursor:pointer;}
-
-/* ── BOOK CTA ── */
+  text-decoration:none;}
 .book-cta{background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));
-  border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:20px;text-align:center;
-  backdrop-filter:blur(16px);}
+  border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:20px;text-align:center;}
 .book-cta .bt{font-size:15px;font-weight:600;margin-bottom:6px;}
 .book-cta .bs{font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:16px;}
 .book-cta .bb{display:inline-block;padding:13px 32px;border-radius:20px;
   background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);
   font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#fff;font-weight:600;
-  text-decoration:none;cursor:pointer;}
+  text-decoration:none;}
+.error-box{display:none;background:rgba(255,60,60,0.08);border:1px solid rgba(255,60,60,0.2);
+  border-radius:16px;padding:16px;margin-bottom:16px;font-size:13px;color:rgba(255,100,100,0.9);line-height:1.6;}
+.error-box.show{display:block;}
 </style>
 </head>
 <body>
@@ -121,72 +101,70 @@ html,body{min-height:100%;background:#06080f;color:#fff;font-family:'Inter',sans
 
 <div class="main">
 
-  <!-- Загрузка фото -->
   <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
     <div class="upload-icon">📸</div>
     <div class="upload-text">Загрузи своё фото</div>
     <div class="upload-sub">Анфас, хорошее освещение</div>
   </div>
-  <input type="file" id="fileInput" accept="image/*">
+  <input type="file" id="fileInput" accept="image/*" capture="user">
 
   <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyze()">
     ✂️ Подобрать стрижку
   </button>
 
-  <!-- Лоадер -->
+  <div class="error-box" id="errorBox"></div>
+
   <div class="loader" id="loader">
     <div class="spinner"></div>
-    <div class="loader-text" id="loaderText">Анализирую форму лица...</div>
+    <div class="loader-text" id="loaderText">Анализирую лицо...</div>
+    <div class="loader-step" id="loaderStep">GigaChat обрабатывает фото</div>
   </div>
 
-  <!-- Результат -->
   <div class="result-box" id="resultBox">
-
     <div class="face-analysis">
       <div class="label">Анализ лица</div>
       <div class="face-params" id="faceParams"></div>
       <div class="ai-text" id="aiText"></div>
     </div>
-
     <div class="cuts-section" id="cutsSection"></div>
-
     <div class="book-cta">
       <div class="bt">Понравилась идея?</div>
       <div class="bs">Запишись к Шухрату — воплотим вместе</div>
       <a class="bb" href="https://dikidi.net/#211288" target="_blank">Записаться</a>
     </div>
-
   </div>
 
 </div>
 
 <script>
-// ── КОНФИГ (замени ключ здесь если истечёт) ──
-const GEMINI_KEY = 'AQ.Ab8RN6LNeK6r3uuMc_TOk606lfcqFyKGP3OBWAfmyNrRu8xw3w';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+// ════════════════════════════════════════
+// КОНФИГ
+// После деплоя на Render — вставь свой URL сюда:
+const SERVER_URL = 'https://shuha.onrender.com';
+
+// Pexels ключ — бесплатно на pexels.com/api:
+const PEXELS_KEY = 'ВСТАВЬ_PEXELS_КЛЮЧ';
+// ════════════════════════════════════════
 
 let photoBase64 = null;
 let photoMime = 'image/jpeg';
 
-// ── ЗАГРУЗКА ФОТО ──
 document.getElementById('fileInput').addEventListener('change', function(e){
   const file = e.target.files[0];
   if(!file) return;
-  photoMime = file.type || 'image/jpeg';
   const reader = new FileReader();
   reader.onload = function(ev){
-    // Сжимаем фото перед отправкой
     const img = new Image();
     img.onload = function(){
       const canvas = document.createElement('canvas');
       const maxSize = 800;
       let w = img.width, h = img.height;
       if(w > maxSize || h > maxSize){
-        if(w > h){ h = Math.round(h * maxSize/w); w = maxSize; }
-        else{ w = Math.round(w * maxSize/h); h = maxSize; }
+        if(w > h){ h = Math.round(h*maxSize/w); w = maxSize; }
+        else{ w = Math.round(w*maxSize/h); h = maxSize; }
       }
       canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
       const compressed = canvas.toDataURL('image/jpeg', 0.8);
       photoBase64 = compressed.split(',')[1];
       photoMime = 'image/jpeg';
@@ -200,103 +178,47 @@ document.getElementById('fileInput').addEventListener('change', function(e){
         </div>`;
       zone.classList.add('has-photo');
       document.getElementById('analyzeBtn').disabled = false;
+      hideError();
     };
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 });
 
-// ── АНАЛИЗ ──
 async function analyze(){
   if(!photoBase64) return;
   const btn = document.getElementById('analyzeBtn');
   btn.disabled = true;
+  hideError();
   document.getElementById('loader').classList.add('show');
   document.getElementById('resultBox').classList.remove('show');
-  document.getElementById('loaderText').textContent = 'Анализирую форму лица...';
-
-  const prompt = `Ты — профессиональный барбер и стилист. Проанализируй фото лица и дай рекомендации по стрижке.
-
-Ответь строго в JSON формате (без markdown, только JSON):
-{
-  "face_shape": "форма лица (овальное/круглое/квадратное/прямоугольное/треугольное/ромбовидное)",
-  "hair_type": "тип волос если видно (прямые/волнистые/кудрявые/густые/тонкие/неопределённо)",
-  "skin_tone": "тон кожи (светлый/средний/тёмный)",
-  "summary": "2-3 предложения о форме лица и что это значит для стрижки",
-  "cuts": [
-    {
-      "name": "название стрижки на русском",
-      "name_en": "название на английском для поиска",
-      "why": "почему эта стрижка подходит для данной формы лица (2-3 предложения)",
-      "search_query": "поисковый запрос для Google Images на английском (например: 'fade haircut oval face men 2024')"
-    },
-    {
-      "name": "вторая стрижка",
-      "name_en": "second haircut english",
-      "why": "почему подходит",
-      "search_query": "search query"
-    },
-    {
-      "name": "третья стрижка",
-      "name_en": "third haircut english",
-      "why": "почему подходит",
-      "search_query": "search query"
-    }
-  ]
-}`;
+  setLoader('Анализирую форму лица...', 'GigaChat обрабатывает фото');
 
   try {
-    const res = await fetch(GEMINI_URL, {
+    const res = await fetch(`${SERVER_URL}/analyze`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-goog-api-key': GEMINI_KEY
-      },
-      body: JSON.stringify({
-        contents:[{parts:[
-          {text: prompt},
-          {inline_data:{mime_type: photoMime, data: photoBase64}}
-        ]}],
-        generationConfig:{temperature:0.4,maxOutputTokens:1200}
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: photoBase64, mimeType: photoMime })
     });
-
-    if(!res.ok) {
-      const errBody = await res.text();
-      throw new Error(`API ${res.status}: ${errBody.slice(0,200)}`);
-    }
-    const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-    // Парсим JSON
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error('Не удалось получить анализ');
-    const result = JSON.parse(jsonMatch[0]);
-
-    document.getElementById('loaderText').textContent = 'Подбираю стрижки...';
-    showResult(result);
-
-  } catch(err) {
+    if(!res.ok) throw new Error('Сервер вернул ' + res.status);
+    const result = await res.json();
+    if(result.error) throw new Error(result.error);
+    setLoader('Подбираю фото стрижек...', 'Загружаю из Pexels');
+    await showResult(result);
+  } catch(err){
     document.getElementById('loader').classList.remove('show');
     btn.disabled = false;
-    alert('Ошибка: ' + err.message + '\nПопробуй ещё раз.');
+    showError('Ошибка: ' + err.message);
   }
 }
 
-function showResult(r){
-  document.getElementById('loader').classList.remove('show');
-
-  // Параметры лица
-  const params = [
+async function showResult(r){
+  document.getElementById('faceParams').innerHTML = [
     {n:'Форма лица', v: r.face_shape || '—'},
-    {n:'Тип волос', v: r.hair_type || '—'},
-  ];
-  document.getElementById('faceParams').innerHTML = params.map(p=>`
-    <div class="face-param"><div class="pn">${p.n}</div><div class="pv">${p.v}</div></div>
-  `).join('');
+    {n:'Тип волос',  v: r.hair_type  || '—'},
+  ].map(p=>`<div class="face-param"><div class="pn">${p.n}</div><div class="pv">${p.v}</div></div>`).join('');
   document.getElementById('aiText').textContent = r.summary || '';
 
-  // Стрижки
   const cuts = r.cuts || [];
   document.getElementById('cutsSection').innerHTML = `
     <div class="cuts-label">Рекомендованные стрижки</div>
@@ -315,44 +237,50 @@ function showResult(r){
           <div class="cut-photo"><div class="photo-loader">⏳</div></div>
           <div class="cut-photo"><div class="photo-loader">⏳</div></div>
         </div>
-        <a class="search-btn" href="https://www.google.com/search?q=${encodeURIComponent(c.search_query)}&tbm=isch" target="_blank">
-          🔍 Смотреть все фото в Google
-        </a>
+        <a class="search-btn"
+           href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(c.name_en + ' haircut men')}"
+           target="_blank">📌 Больше фото на Pinterest</a>
       </div>
-    `).join('')}
-  `;
+    `).join('')}`;
 
+  document.getElementById('loader').classList.remove('show');
   document.getElementById('resultBox').classList.add('show');
   document.getElementById('analyzeBtn').disabled = false;
 
-  // Загружаем превью фото через Google CSE или Unsplash
-  cuts.forEach((c,i) => loadPhotos(c.search_query, i));
+  await Promise.all(cuts.map((c,i) => loadPexels(c.pexels_query, i)));
 }
 
-// Загружаем фото с Unsplash (бесплатно, без ключа)
-async function loadPhotos(query, idx){
+async function loadPexels(query, idx){
   const container = document.getElementById(`photos-${idx}`);
   if(!container) return;
-
-  // Используем Unsplash Source (бесплатно без API)
-  const queries = [
-    query,
-    query + ' barber',
-    query + ' style'
-  ];
-
-  const photos = queries.map((q,i) => {
-    const seed = encodeURIComponent(q + i);
-    return `https://source.unsplash.com/300x300/?${encodeURIComponent(q.replace(/ /g,','))}`;
-  });
-
-  container.innerHTML = photos.map((url,i)=>`
-    <div class="cut-photo">
-      <img src="${url}" alt="Стрижка" loading="lazy"
-        onerror="this.parentElement.innerHTML='<div class=\\'photo-loader\\'>📷</div>'">
-    </div>
-  `).join('');
+  if(!PEXELS_KEY || PEXELS_KEY === 'ВСТАВЬ_PEXELS_КЛЮЧ'){
+    container.innerHTML = `<div class="cut-photo" style="grid-column:1/-1;aspect-ratio:3/1;">
+      <div class="photo-loader" style="flex-direction:column;gap:6px;font-size:11px;color:rgba(255,255,255,0.3);">🔑 Вставь Pexels ключ</div>
+    </div>`;
+    return;
+  }
+  try {
+    const res = await fetch(
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=3&orientation=square`,
+      { headers: { 'Authorization': PEXELS_KEY } }
+    );
+    const data = await res.json();
+    const photos = data.photos || [];
+    if(!photos.length){ container.innerHTML = ''; return; }
+    container.innerHTML = photos.map(p=>`
+      <div class="cut-photo">
+        <img src="${p.src.medium}" alt="стрижка" loading="lazy"
+          onerror="this.parentElement.innerHTML='<div class=\\'photo-loader\\'>📷</div>'">
+      </div>`).join('');
+  } catch(e){ container.innerHTML = ''; }
 }
+
+function setLoader(t,s){
+  document.getElementById('loaderText').textContent=t;
+  document.getElementById('loaderStep').textContent=s;
+}
+function showError(m){ const b=document.getElementById('errorBox'); b.textContent=m; b.classList.add('show'); }
+function hideError(){ document.getElementById('errorBox').classList.remove('show'); }
 </script>
 </body>
 </html>
